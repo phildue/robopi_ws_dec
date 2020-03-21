@@ -4,7 +4,7 @@
 #include <ros/ros.h>
 #include <GpioWheel/GpioWheel.h>
 #include <chrono>
-
+#include "std_msgs/String.h"
 constexpr int enA = 21;
 constexpr int enB = 13;
 constexpr int in1 = 20;
