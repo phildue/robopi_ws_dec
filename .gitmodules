@@ -1,3 +1,6 @@
 [submodule "src/gpio_wheel_ros/GpioWheel"]
-	path = src/ros_pi_ln298n/lib/pi_ln298n
+	path = src/robopi_actuators/lib/pi_ln298n
 	url = https://github.com/phildue/GpioWheel
+[submodule "src/robopi_actuators/ext/pi_ln298n"]
+	path = src/robopi_actuators/ext/pi_ln298n
+	url = https://github.com/phildue/pi-ln298n

@@ -110,7 +110,7 @@ catkin_package(
 ###########
 ## Build ##
 ###########
-add_subdirectory(lib/pi_ln298n)
+add_subdirectory(ext/pi_ln298n)
 ## Specify additional locations of header files
 ## Your package locations should be listed before other locations
 include_directories(
