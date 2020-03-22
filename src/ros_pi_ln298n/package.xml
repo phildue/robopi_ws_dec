@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <package format="2">
-  <name>gpio_wheel_ros</name>
+  <name>ros_pi_ln298n</name>
   <version>0.0.0</version>
-  <description>The gpio_wheel_ros package</description>
+  <description>The ros_pi_ln298n package</description>
 
   <!-- One maintainer tag required, multiple allowed, one person per tag -->
   <!-- Example:  -->
