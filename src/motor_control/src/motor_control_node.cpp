@@ -74,14 +74,14 @@ int main(int argc, char **argv)
     ros::Publisher left_pub = n.advertise<std_msgs::Float32>("gpio_motor/gpio_left", 10);
     ros::Publisher right_pub = n.advertise<std_msgs::Float32>("gpio_motor/gpio_right", 10);
 
-    ros::Rate loop_rate(10);
+    ros::Rate loop_rate(0.5);
 
     /**
      * A count of how many messages we have sent. This is used to create
      * a unique string for each message.
      */
      float setPoint = 0.1;
-     float increment = 0.01;
+     float increment = 0.1;
     while (ros::ok())
     {
         /**
@@ -94,7 +94,7 @@ int main(int argc, char **argv)
 
         setPoint += increment;
 
-        if(setPoint >= 1.0 || setPoint <= 0.1)
+        if(setPoint >= 0.9 || setPoint <= 0.1)
         {
             increment *= -1;
         }
