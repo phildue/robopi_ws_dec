@@ -4,7 +4,7 @@
 #include <ros/ros.h>
 #include <GpioWheel/GpioWheel.h>
 #include <chrono>
-#include "std_msgs/String.h"
+#include "std_msgs/Float32.h"
 constexpr int enA = 21;
 constexpr int enB = 13;
 constexpr int in1 = 20;
@@ -14,28 +14,19 @@ constexpr int in4 = 19;
 
 std::shared_ptr<GpioWheel> left,right;
 
-void leftCallBack(const std_msgs::String::ConstPtr& msg)
+void leftCallBack(const std_msgs::Float32::ConstPtr& msg)
 {
-   ROS_INFO("I heard: [%s]", msg->data.c_str());
+   ROS_INFO("I heard: [%f]", msg->data);
 
-    auto start = std::chrono::system_clock::now();
-
-    while (std::chrono::duration_cast<std::chrono::seconds>((std::chrono::system_clock::now() - start)).count() < 5.0)
-    {
-        left->forward();
-    }
+    left->set(msg->data);
  }
 
-void rightCallBack(const std_msgs::String::ConstPtr& msg)
+void rightCallBack(const std_msgs::Float32::ConstPtr& msg)
 {
-    ROS_INFO("I heard: [%s]", msg->data.c_str());
+    ROS_INFO("I heard: [%f]", msg->data);
 
-    auto start = std::chrono::system_clock::now();
+    right->set(msg->data);
 
-    while (std::chrono::duration_cast<std::chrono::seconds>((std::chrono::system_clock::now() - start)).count() < 5.0)
-    {
-        right->forward();
-    }
 }
 int main(int argc, char **argv)
 {
@@ -43,8 +34,8 @@ int main(int argc, char **argv)
     ros::NodeHandle n("~");
     ros::Rate loop_rate(50);
 
-    left = std::make_shared<GpioWheel>(in1,in2,enA,0.5);
-    right = std::make_shared<GpioWheel>(in4,in3,enB,0.5);
+    left = std::make_shared<GpioWheel>(in1,in2,enA);
+    right = std::make_shared<GpioWheel>(in4,in3,enB);
 
     ros::Subscriber subLeft = n.subscribe("gpio_left", 1000, leftCallBack);
     ros::Subscriber subRight = n.subscribe("gpio_right", 1000, rightCallBack);
