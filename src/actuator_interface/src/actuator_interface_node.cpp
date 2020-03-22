@@ -2,20 +2,22 @@
 // Created by phil on 22.03.20.
 //
 
-#include "RobotBase.h"
 #include <controller_manager/controller_manager.h>
-int main()
+#include "ActuatorInterface.h"
+#include <ros/ros.h>
+int main(int argc, char** argv)
 {
-    RobotBase robot;
-    controller_manager::ControllerManager cm(&robot);
-    ros::Time ts = ros::Time::now();
-    while (true)
+    ros::init(argc, argv, "actuator_interface");
+
+    ros::NodeHandle n("~");
+    ros::Rate loop_rate(50);
+    ActuatorInterface rhi(n);
+
+    while (ros::ok())
     {
-        ros::Duration d = ros::Time::now() - ts;
-        ts = ros::Time::now();
-        robot.read(ts,d);
-        cm.update(ts, d);
-        robot.write(ts,d);
-        sleep(1);
+        ros::spinOnce();
+        loop_rate.sleep();
     }
+
+    return 0;
 }
