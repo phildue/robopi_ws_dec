@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 2.8.3)
-project(ros_pi_ln298n)
+project(robopi_actuators)
 
 ## Compile as C++11, supported in ROS Kinetic and newer
 # add_compile_options(-std=c++11)
@@ -7,7 +7,9 @@ project(ros_pi_ln298n)
 ## Find catkin macros and libraries
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages
-find_package(catkin REQUIRED)
+find_package(catkin REQUIRED COMPONENTS
+        roscpp
+        )
 
 ## System dependencies are found with CMake's conventions
 # find_package(Boost REQUIRED COMPONENTS system)
@@ -108,7 +110,7 @@ catkin_package(
 ###########
 ## Build ##
 ###########
-add_subdirectory(pi_ln298n)
+add_subdirectory(lib/pi_ln298n)
 ## Specify additional locations of header files
 ## Your package locations should be listed before other locations
 include_directories(
@@ -129,7 +131,8 @@ ${catkin_INCLUDE_DIRS}
 ## Declare a C++ executable
 ## With catkin_make all packages are built within a single CMake context
 ## The recommended prefix ensures that target names across packages don't collide
-# add_executable(${PROJECT_NAME}_node src/gpio_wheel_ros_node.cpp)
+add_executable(gpio_motor_node src/gpio_motor_node.cpp)
+add_executable(motor_cmd_pub_node src/motor_cmd_pub_node.cpp)
 
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
@@ -139,13 +142,18 @@ ${catkin_INCLUDE_DIRS}
 
 ## Add cmake target dependencies of the executable
 ## same as for the library above
-# add_dependencies(${PROJECT_NAME}_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+add_dependencies(gpio_motor_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+add_dependencies(motor_cmd_pub_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
 ## Specify libraries to link a library or executable target against
-#target_link_libraries(${PROJECT_NAME}_node
-#   ${catkin_LIBRARIES}
-# )
-
+target_link_libraries(gpio_motor_node
+   ${catkin_LIBRARIES}
+    pi_ln298n
+)
+target_link_libraries(motor_cmd_pub_node
+        ${catkin_LIBRARIES}
+        pi_ln298n
+        )
 #############
 ## Install ##
 #############
