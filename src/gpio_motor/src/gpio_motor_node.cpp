@@ -34,11 +34,11 @@ int main(int argc, char **argv)
     ros::NodeHandle n("~");
     ros::Rate loop_rate(50);
 
-    left = std::make_shared<GpioWheel>(in1,in2,enA);
-    right = std::make_shared<GpioWheel>(in4,in3,enB);
+    left = std::make_shared<GpioWheel>(in4,in3,enB);
+    right = std::make_shared<GpioWheel>(in1,in2,enA);
 
-    ros::Subscriber subLeft = n.subscribe("gpio_left", 1000, leftCallBack);
-    ros::Subscriber subRight = n.subscribe("gpio_right", 1000, rightCallBack);
+    ros::Subscriber subLeft = n.subscribe("gpio_left", 10, leftCallBack);
+    ros::Subscriber subRight = n.subscribe("gpio_right", 10, rightCallBack);
     while (ros::ok())
     {
         ros::spinOnce();
