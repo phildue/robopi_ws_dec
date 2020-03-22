@@ -1,3 +1,3 @@
 [submodule "src/gpio_wheel_ros/GpioWheel"]
-	path = src/gpio_wheel_ros/GpioWheel
+	path = src/gpio_wheel_ros/pi_ln298n
 	url = https://github.com/phildue/GpioWheel
