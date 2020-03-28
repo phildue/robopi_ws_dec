@@ -1,0 +1,12 @@
+<launch>
+    <rosparam file="$(find actuator_interface)/config/hardware.yaml" command="load"/>
+    <rosparam file="$(find actuator_interface)/config/controllers.yaml" command="load"/>
+    <rosparam file="$(find actuator_interface)/config/joint_limits.yaml" command="load"/>
+    <node name="actuator_interface" pkg="actuator_interface" type="actuator_interface_node" output="screen"/>
+    <node name="controller_spawner" pkg="controller_manager" type="spawner" respawn="false" output="screen" ns="/"
+          args="
+            /robopi/controller/state
+            /robopi/controller/velocity/left_wheel
+            /robopi/controller/velocity/right_wheel
+        "/>
+</launch>

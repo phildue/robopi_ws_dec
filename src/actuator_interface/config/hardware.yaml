@@ -1,0 +1,15 @@
+robopi:
+  hardware_interface:
+    loop_hz: 10 # hz
+    joints:
+      - left_wheel
+      - right_wheel
+  gpio_wheels:
+    left_wheel:
+      en: 21
+      inF: 20
+      inB: 16
+    right_wheel:
+      en: 13
+      inF: 26
+      inB: 19
