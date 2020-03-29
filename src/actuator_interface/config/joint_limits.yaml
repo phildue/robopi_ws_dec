@@ -8,8 +8,8 @@ joint_limits:
     min_acceleration: -0.0001
     max_acceleration: 0.0001
     has_jerk_limits: true
-    max_jerk: 0.0001
-    min_jerk: -0.0001
+    max_jerk: 0.0000000001
+    min_jerk: -0.000000001
     has_effort_limits: true
     max_effort: 1.0
     min_effort: -1.0
@@ -27,7 +27,8 @@ joint_limits:
     min_acceleration: -0.1
     max_acceleration: 0.1
     has_jerk_limits: true
-    max_jerk: 100.0
+    max_jerk: 0.0000000001
+    min_jerk: -0.000000001
     has_effort_limits: true
     max_effort: 1.0
     min_effort: -1.0
