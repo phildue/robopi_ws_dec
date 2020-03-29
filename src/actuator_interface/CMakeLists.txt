@@ -12,8 +12,9 @@ find_package(catkin REQUIRED COMPONENTS
         hardware_interface
         roscpp
         controller_manager
+        roslaunch
 )
-
+roslaunch_add_file_check(launch)
 ## System dependencies are found with CMake's conventions
 # find_package(Boost REQUIRED COMPONENTS system)
 
@@ -135,6 +136,7 @@ include_directories(
 ## With catkin_make all packages are built within a single CMake context
 ## The recommended prefix ensures that target names across packages don't collide
 add_executable(${PROJECT_NAME}_node src/actuator_interface_node.cpp src/ActuatorInterface.cpp src/ActuatorInterface.h)
+add_executable(test_publisher_node src/test_publisher_node.cpp)
 
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
@@ -151,7 +153,10 @@ target_link_libraries(${PROJECT_NAME}_node
    ${catkin_LIBRARIES}
         pi_ln298n
         )
-
+target_link_libraries(test_publisher_node
+        ${catkin_LIBRARIES}
+        pi_ln298n
+        )
 #############
 ## Install ##
 #############

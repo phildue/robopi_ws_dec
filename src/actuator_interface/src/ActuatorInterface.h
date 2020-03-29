@@ -36,20 +36,20 @@ public:
 
 protected:
     std::map<std::string,pi_ln298n::GpioMotor> _wheels;
-    std::vector<double> joint_effort_,_joint_position,_joint_velocity;
-    std::vector<double> joint_effort_command_;
+    std::vector<double> _jointEffort,_jointPosition,_jointVelocity;
+    std::vector<double> _jointEffortCommand;
 
     ros::NodeHandle _nh;
-    ros::Timer non_realtime_loop_;
+    ros::Timer _nonRealTimeLoop;
     ros::Duration control_period_;
-    ros::Duration elapsed_time_;
-    JointStateInterface joint_state_interface_;
+    ros::Duration _elapsedTime;
+    JointStateInterface _jointStateInterface;
     EffortJointInterface _effortJointInterface;
-    joint_limits_interface::EffortJointSaturationInterface effort_joint_saturation_interface_;
-    int _num_joints;
-    std::vector<std::string> _wheel_names;
-    double loop_hz_;
-    std::shared_ptr<controller_manager::ControllerManager> _controller_manager;
+    joint_limits_interface::EffortJointSoftLimitsInterface _effortJointSoftLimitInterface;
+    int _numJoints;
+    std::vector<std::string> _wheelNames;
+    double _loopHz;
+    std::shared_ptr<controller_manager::ControllerManager> _ctrlManager;
     double p_error_, v_error_, e_error_;
 };
 

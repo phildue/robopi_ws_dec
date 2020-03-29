@@ -1,15 +1,15 @@
 robopi:
-  hardware_interface:
+  actuator_interface:
     loop_hz: 10 # hz
-    joints:
-      - left_wheel
-      - right_wheel
+    wheels:
+      - wheel_left
+      - wheel_right
   gpio_wheels:
-    left_wheel:
+    wheel_left:
       en: 21
       inF: 20
       inB: 16
-    right_wheel:
+    wheel_right:
       en: 13
       inF: 26
       inB: 19

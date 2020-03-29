@@ -15,68 +15,76 @@ constexpr int in4 = 19;
 ActuatorInterface::ActuatorInterface(ros::NodeHandle &nh) : _nh(nh)
                                                             {
     init();
-    _controller_manager.reset(new controller_manager::ControllerManager(this, _nh));
-    _nh.param("/robopi/actuator_interface/loop_hz", loop_hz_, 0.1);
-    ros::Duration update_freq = ros::Duration(1.0/loop_hz_);
-    non_realtime_loop_ = _nh.createTimer(update_freq, &ActuatorInterface::update, this);
+    _ctrlManager.reset(new controller_manager::ControllerManager(this, _nh));
+    _nh.param("/robopi/actuator_interface/loop_hz", _loopHz, 0.1);
+    ros::Duration update_freq = ros::Duration(1.0 / _loopHz);
+    _nonRealTimeLoop = _nh.createTimer(update_freq, &ActuatorInterface::update, this);
 
-    _nh.getParam("/robopi/gpio_wheels", _wheel_names);
-    for(const auto &_wheel : _wheel_names)
-    {
-        int en,inF,inB;
-        _nh.getParam("/robopi/gpio_wheels/en", en);
-        _nh.getParam("/robopi/gpio_wheels/inF", inF);
-        _nh.getParam("/robopi/gpio_wheels/inB", inB);
-        _wheels.insert({_wheel,pi_ln298n::GpioMotor(inF,inB,en)});
-    }
+
 }
 
 void ActuatorInterface::init()
 {
-    _num_joints = _wheel_names.size();
+    _nh.getParam("/robopi/actuator_interface/wheels", _wheelNames);
+    for(const auto &wheelName : _wheelNames)
+    {
+        ROS_INFO("Found wheel: [%s]",wheelName.c_str());
+        int en,inF,inB;
+        _nh.getParam("/robopi/gpio_wheels/" + wheelName + "/en", en);
+        _nh.getParam("/robopi/gpio_wheels/" + wheelName + "/inF", inF);
+        _nh.getParam("/robopi/gpio_wheels/" + wheelName + "/inB", inB);
+        _wheels.insert({wheelName, pi_ln298n::GpioMotor(inF, inB, en)});
+    }
+    _numJoints = _wheelNames.size();
 
-    joint_effort_.resize(_num_joints);
-    joint_effort_command_.resize(_num_joints);
+    _jointEffort.resize(_numJoints);
+    _jointPosition.resize(_numJoints);
+    _jointVelocity.resize(_numJoints);
+    _jointEffortCommand.resize(_numJoints);
+    for (int i = 0; i < _numJoints; ++i) {
 
-    // Initialize Controller
-    for (int i = 0; i < _num_joints; ++i) {
-        //TODO rework, potentially include all kind of controllers
+        JointStateHandle jointStateHandle(_wheelNames[i], &_jointPosition[i], &_jointVelocity[i], &_jointEffort[i]);
+        _jointStateInterface.registerHandle(jointStateHandle);
+        ROS_INFO("[%s]: Registered joint state handle.",_wheelNames[i].c_str());
 
-        // Create joint state interface
-        JointStateHandle jointStateHandle(_wheel_names[i], &_joint_position[i], &_joint_velocity[i], &joint_effort_[i]);
-        joint_state_interface_.registerHandle(jointStateHandle);
-
-        // Create position joint interface
-        JointHandle joint_effort_handle(jointStateHandle, &joint_effort_command_[i]);
+        JointHandle jointEffortHandle(jointStateHandle, &_jointEffortCommand[i]);
         JointLimits limits;
-        getJointLimits(_wheel_names[i], _nh, limits);
-        joint_limits_interface::EffortJointSaturationHandle jointLimitsHandle(joint_effort_handle, limits);
-        effort_joint_saturation_interface_.registerHandle(jointLimitsHandle);
-        _effortJointInterface.registerHandle(joint_effort_handle);
-
+        SoftJointLimits softLimits;
+        getJointLimits(_wheelNames[i], _nh, limits);
+        getSoftJointLimits(_wheelNames[i], _nh, softLimits);
+        joint_limits_interface::EffortJointSoftLimitsHandle jointLimitsHandle(jointEffortHandle, limits, softLimits);
+        _effortJointSoftLimitInterface.registerHandle(jointLimitsHandle);
+        _effortJointInterface.registerHandle(jointEffortHandle);
+        ROS_INFO("[%s]: Registered joint effort handle.",_wheelNames[i].c_str());
     }
 
-    registerInterface(&joint_state_interface_);
+    registerInterface(&_jointStateInterface);
+    ROS_INFO("Registered joint state interface");
+
     registerInterface(&_effortJointInterface);
-    registerInterface(&effort_joint_saturation_interface_);
+    ROS_INFO("Registered joint effort interface");
+    registerInterface(&_effortJointSoftLimitInterface);
+    ROS_INFO("Registered joint effort limits interface");
 }
 
 void ActuatorInterface::update(const ros::TimerEvent& e) {
-    elapsed_time_ = ros::Duration(e.current_real - e.last_real);
+
+    _elapsedTime = ros::Duration(e.current_real - e.last_real);
+    //ROS_INFO("Update [%d]: (%f,%f)",_elapsedTime.nsec,_jointEffortCommand[0],_jointEffortCommand[1]);
     read();
-    _controller_manager->update(ros::Time::now(), elapsed_time_);
-    write(elapsed_time_);
+    _ctrlManager->update(ros::Time::now(), _elapsedTime);
+    write(_elapsedTime);
 }
 
 void ActuatorInterface::read() {
-    for (int i = 0; i < _num_joints; i++) {
-        joint_effort_[i] = _wheels.find(_wheel_names[i])->second.torque();
+    for (int i = 0; i < _numJoints; i++) {
+        _jointEffort[i] = _wheels.find(_wheelNames[i])->second.torque();
     }
 }
 
 void ActuatorInterface::write(ros::Duration elapsed_time) {
-    effort_joint_saturation_interface_.enforceLimits(elapsed_time);
-    for (int i = 0; i < _num_joints; i++) {
-        _wheels.find(_wheel_names[i])->second.set(joint_effort_command_[i]);
+    _effortJointSoftLimitInterface.enforceLimits(elapsed_time);
+    for (int i = 0; i < _numJoints; i++) {
+        _wheels.find(_wheelNames[i])->second.set(_jointEffortCommand[i]);
     }
 }

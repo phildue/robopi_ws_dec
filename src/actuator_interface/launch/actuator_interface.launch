@@ -6,7 +6,9 @@
     <node name="controller_spawner" pkg="controller_manager" type="spawner" respawn="false" output="screen" ns="/"
           args="
             /robopi/controller/state
-            /robopi/controller/velocity/left_wheel
-            /robopi/controller/velocity/right_wheel
+            /robopi/controller/effort/wheel_left
+            /robopi/controller/effort/wheel_right
         "/>
+    <node name="test_publisher" pkg="actuator_interface" type="test_publisher_node" output="screen"/>
+
 </launch>

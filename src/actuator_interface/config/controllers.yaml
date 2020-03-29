@@ -3,12 +3,12 @@ robopi:
     state:
       type: joint_state_controller/JointStateController
       publish_rate: 50
-    position:
-      left_wheel:
-        type: effort_controllers/JointVelocityController
-        joint: gpio_wheel
+    effort:
+      wheel_left:
+        type: effort_controllers/JointEffortController
+        joint: wheel_left
         pid: {p: 10.0, i: 0.0, d: 1.0}
-      right_wheel:
-        type: effort_controllers/JointVelocityController
-        joint: gpio_wheel
+      wheel_right:
+        type: effort_controllers/JointEffortController
+        joint: wheel_right
         pid: {p: 5.0, i: 2.0, d: 1.0}
