@@ -80,7 +80,7 @@ int main(int argc, char **argv)
      * A count of how many messages we have sent. This is used to create
      * a unique string for each message.
      */
-     float setPoint = 1.0;
+     float setPoint = 0.6;
     while (ros::ok())
     {
         /**
