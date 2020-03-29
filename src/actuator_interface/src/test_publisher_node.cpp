@@ -74,14 +74,13 @@ int main(int argc, char **argv)
     ros::Publisher left_pub = n.advertise<std_msgs::Float64>( "/robopi/controller/effort/wheel_left/command", 10);
     ros::Publisher right_pub = n.advertise<std_msgs::Float64>("/robopi/controller/effort/wheel_right/command", 10);
 
-    ros::Rate loop_rate(0.5);
+    ros::Rate loop_rate(0.05);
 
     /**
      * A count of how many messages we have sent. This is used to create
      * a unique string for each message.
      */
-     float setPoint = 0.1;
-     float increment = 0.1;
+     float setPoint = 1.0;
     while (ros::ok())
     {
         /**
@@ -92,12 +91,6 @@ int main(int argc, char **argv)
         msgLeft.data = setPoint;
         msgRight.data = -1.0*setPoint;
 
-        setPoint += increment;
-
-        if(setPoint >= 0.9 || setPoint <= 0.1)
-        {
-            increment *= -1;
-        }
 
         ROS_INFO("Setting %f,%f", msgLeft.data,msgRight.data);
 
@@ -110,6 +103,13 @@ int main(int argc, char **argv)
         left_pub.publish(msgLeft);
         right_pub.publish(msgRight);
 
+        if(setPoint == 1.0)
+        {
+            setPoint = -1.0;
+        }else{
+            setPoint = 1.0;
+
+        }
         ros::spinOnce();
 
         loop_rate.sleep();
