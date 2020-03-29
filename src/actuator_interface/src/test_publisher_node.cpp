@@ -74,7 +74,7 @@ int main(int argc, char **argv)
     ros::Publisher left_pub = n.advertise<std_msgs::Float64>( "/robopi/controller/effort/wheel_left/command", 10);
     ros::Publisher right_pub = n.advertise<std_msgs::Float64>("/robopi/controller/effort/wheel_right/command", 10);
 
-    ros::Rate loop_rate(0.05);
+    ros::Rate loop_rate(0.5);
 
     /**
      * A count of how many messages we have sent. This is used to create
@@ -102,14 +102,14 @@ int main(int argc, char **argv)
          */
         left_pub.publish(msgLeft);
         right_pub.publish(msgRight);
-
+        /*
         if(setPoint == 1.0)
         {
             setPoint = -1.0;
         }else{
             setPoint = 1.0;
 
-        }
+        }*/
         ros::spinOnce();
 
         loop_rate.sleep();
