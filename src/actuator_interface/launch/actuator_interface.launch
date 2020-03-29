@@ -2,6 +2,7 @@
     <rosparam file="$(find actuator_interface)/config/hardware.yaml" command="load"/>
     <rosparam file="$(find actuator_interface)/config/controllers.yaml" command="load"/>
     <rosparam file="$(find actuator_interface)/config/joint_limits.yaml" command="load"/>
+    <arg name="node_start_delay" default="5.0" />
     <node name="actuator_interface" pkg="actuator_interface" type="actuator_interface_node" output="screen"/>
     <node name="controller_spawner" pkg="controller_manager" type="spawner" respawn="false" output="screen" ns="/"
           args="
@@ -9,6 +10,6 @@
             /robopi/controller/effort/wheel_left
             /robopi/controller/effort/wheel_right
         "/>
-    <node name="test_publisher" pkg="actuator_interface" type="test_publisher_node" output="screen"/>
+    <node name="test_publisher" launch-prefix="bash -c 'sleep $(arg node_start_delay); $0 $@' " pkg="actuator_interface" type="test_publisher_node" output="screen"/>
 
 </launch>

@@ -16,6 +16,7 @@
 #include <boost/scoped_ptr.hpp>
 #include <ros/ros.h>
 #include <pi_ln298n/pi_ln298n.h>
+#include <thread>
 using namespace hardware_interface;
 using joint_limits_interface::JointLimits;
 using joint_limits_interface::SoftJointLimits;

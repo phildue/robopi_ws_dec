@@ -78,7 +78,7 @@ void ActuatorInterface::update(const ros::TimerEvent& e) {
 
 void ActuatorInterface::read() {
     for (int i = 0; i < _numJoints; i++) {
-        _jointEffort[i] = _wheels.find(_wheelNames[i])->second.torque();
+        _jointEffort[i] = _wheels.find(_wheelNames[i])->second.effort();
     }
 }
 
