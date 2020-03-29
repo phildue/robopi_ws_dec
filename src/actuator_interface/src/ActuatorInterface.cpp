@@ -77,9 +77,7 @@ void ActuatorInterface::update(const ros::TimerEvent& e) {
 }
 
 void ActuatorInterface::read() {
-    for (int i = 0; i < _numJoints; i++) {
-        _jointEffort[i] = _wheels.find(_wheelNames[i])->second.effort();
-    }
+    //no sensors so we cant do anything
 }
 
 void ActuatorInterface::write(ros::Duration elapsed_time) {

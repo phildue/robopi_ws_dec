@@ -7,8 +7,6 @@ robopi:
       wheel_left:
         type: effort_controllers/JointEffortController
         joint: wheel_left
-        pid: {p: 0.01, i: 0, d: 0.0}
       wheel_right:
         type: effort_controllers/JointEffortController
         joint: wheel_right
-        pid: {p: 0.01, i: 0, d: 0.0}
