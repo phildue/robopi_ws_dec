@@ -5,11 +5,12 @@ robopi:
       - wheel_left
       - wheel_right
   gpio_wheels:
+    #from gpio wiring
     wheel_left:
       en: 21
       inF: 20
       inB: 16
     wheel_right:
       en: 13
-      inF: 26
-      inB: 19
+      inF: 19
+      inB: 26
