@@ -4,3 +4,6 @@
 [submodule "src/robopi_actuators/ext/pi_ln298n"]
 	path = src/robopi_actuators/ext/pi_ln298n
 	url = https://github.com/phildue/pi-ln298n
+[submodule "src/viso2"]
+	path = src/viso2
+	url = https://github.com/srv/viso2

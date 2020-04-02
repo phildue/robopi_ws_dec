@@ -15,4 +15,7 @@
     <node name="image_view" pkg="image_view" type="image_view" output="screen">
             <remap from="image" to="/usb_cam/image_raw"/>
     </node>
+    <node name="mono_odometer" pkg="viso2_ros" type="mono_odometer">
+        <remap from="image" to="/usb_cam/image_raw"/>
+    </node>
 </launch>
