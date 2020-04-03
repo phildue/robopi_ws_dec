@@ -2,7 +2,7 @@
 // Created by phil on 22.03.20.
 //
 
-#include "ActuatorInterface.h"
+#include "ActuatorInterfaceEffort.h"
 
 //TODO move this to config
 constexpr int enA = 21;
@@ -12,18 +12,18 @@ constexpr int in2 = 16;
 constexpr int in3 = 26;
 constexpr int in4 = 19;
 
-ActuatorInterface::ActuatorInterface(ros::NodeHandle &nh) : _nh(nh)
+ActuatorInterfaceEffort::ActuatorInterfaceEffort(ros::NodeHandle &nh) : _nh(nh)
                                                             {
     init();
     _ctrlManager.reset(new controller_manager::ControllerManager(this, _nh));
     _nh.param("/robopi/actuator_interface/loop_hz", _loopHz, 0.1);
     ros::Duration update_freq = ros::Duration(1.0 / _loopHz);
-    _nonRealTimeLoop = _nh.createTimer(update_freq, &ActuatorInterface::update, this);
+    _nonRealTimeLoop = _nh.createTimer(update_freq, &ActuatorInterfaceEffort::update, this);
 
 
 }
 
-void ActuatorInterface::init()
+void ActuatorInterfaceEffort::init()
 {
     _nh.getParam("/robopi/actuator_interface/wheels", _wheelNames);
     for(const auto &wheelName : _wheelNames)
@@ -67,7 +67,7 @@ void ActuatorInterface::init()
     ROS_INFO("Registered joint effort limits interface");
 }
 
-void ActuatorInterface::update(const ros::TimerEvent& e) {
+void ActuatorInterfaceEffort::update(const ros::TimerEvent& e) {
 
     _elapsedTime = ros::Duration(e.current_real - e.last_real);
     //ROS_INFO("Update [%d]: (%f,%f)",_elapsedTime.nsec,_jointEffortCommand[0],_jointEffortCommand[1]);
@@ -76,11 +76,11 @@ void ActuatorInterface::update(const ros::TimerEvent& e) {
     write(_elapsedTime);
 }
 
-void ActuatorInterface::read() {
+void ActuatorInterfaceEffort::read() {
     //no sensors so we cant do anything
 }
 
-void ActuatorInterface::write(ros::Duration elapsed_time) {
+void ActuatorInterfaceEffort::write(ros::Duration elapsed_time) {
     _effortJointSoftLimitInterface.enforceLimits(elapsed_time);
     for (int i = 0; i < _numJoints; i++) {
         _wheels.find(_wheelNames[i])->second.set(_jointEffortCommand[i]);

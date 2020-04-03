@@ -23,13 +23,11 @@ using joint_limits_interface::SoftJointLimits;
 using joint_limits_interface::PositionJointSoftLimitsHandle;
 using joint_limits_interface::PositionJointSoftLimitsInterface;
 
-constexpr double POSITION_STEP_FACTOR = 10;
-constexpr double VELOCITY_STEP_FACTOR = 10;
 
-class ActuatorInterface : public hardware_interface::RobotHW{
+class ActuatorInterfaceEffort : public hardware_interface::RobotHW{
 public:
-    explicit ActuatorInterface(ros::NodeHandle& nh);
-    ~ActuatorInterface() = default;
+    explicit ActuatorInterfaceEffort(ros::NodeHandle& nh);
+    ~ActuatorInterfaceEffort() = default;
     void init();
     void update(const ros::TimerEvent& e);
     void read();

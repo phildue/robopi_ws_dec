@@ -135,7 +135,7 @@ include_directories(
 ## Declare a C++ executable
 ## With catkin_make all packages are built within a single CMake context
 ## The recommended prefix ensures that target names across packages don't collide
-add_executable(${PROJECT_NAME}_node src/actuator_interface_node.cpp src/ActuatorInterface.cpp src/ActuatorInterface.h)
+add_executable(${PROJECT_NAME}_node src/actuator_interface_node.cpp src/ActuatorInterfaceEffort.cpp src/ActuatorInterfaceEffort.h src/ActuatorInterfaceVelocity.h src/ActuatorInterfaceVelocity.cpp)
 add_executable(test_publisher_node src/test_publisher_node.cpp)
 
 ## Rename C++ executable without prefix
