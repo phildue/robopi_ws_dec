@@ -39,7 +39,6 @@ protected:
     std::map<std::string,pi_ln298n::GpioMotor> _wheels;
     std::vector<double> _jointEffort,_jointPosition,_jointVelocity;
     std::vector<double> _jointEffortCommand;
-
     ros::NodeHandle _nh;
     ros::Timer _nonRealTimeLoop;
     ros::Duration control_period_;
