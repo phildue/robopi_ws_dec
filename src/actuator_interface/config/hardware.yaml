@@ -1,6 +1,7 @@
 robopi:
   actuator_interface:
     loop_hz: 10 # hz
+    interface_type: "velocity"
     wheels:
       - wheel_left
       - wheel_right

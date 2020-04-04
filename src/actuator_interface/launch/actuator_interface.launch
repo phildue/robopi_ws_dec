@@ -6,9 +6,7 @@
     <node name="actuator_interface" pkg="actuator_interface" type="actuator_interface_node" output="screen"/>
     <node name="controller_spawner" pkg="controller_manager" type="spawner" respawn="false" output="screen" ns="/"
           args="
-            /robopi/controller/state
-            /robopi/controller/effort/wheel_left
-            /robopi/controller/effort/wheel_right
+            /robopi/controller/mobile_base_controller
         "/>
     <!--<node name="test_publisher" launch-prefix="bash -c 'sleep $(arg node_start_delay); $0 $@' " pkg="actuator_interface" type="test_publisher_node" output="screen"/>-->
     <node name="usb_cam" pkg="usb_cam" type="usb_cam_node">
